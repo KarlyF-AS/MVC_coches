@@ -53,6 +53,9 @@ public class Model {
      * @return
      */
     public int getVelocidad(String matricula) {
-        return getCoche(matricula).velocidad;
+        if(matricula == null){
+            return 0;
+        }else
+            return getCoche(matricula).velocidad;
     }
 }
