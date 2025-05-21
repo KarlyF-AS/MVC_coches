@@ -1,5 +1,9 @@
+/**
+ * Clase principal que inicia la aplicación
+ */
 public class App {
-    public static void mian(String[] args){
-        View.menu();
+    public static void main(String[] args) {
+        System.out.println("=== SISTEMA DE GESTIÓN DE COCHES ===");
+        Controller.iniciarAplicacion();
     }
 }

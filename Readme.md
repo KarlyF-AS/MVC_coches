@@ -56,16 +56,29 @@ El mismo diagrama con los nombres de los métodos
 
 ```mermaid
 sequenceDiagram
-    participant Model
+    participant App
     participant Controller
+    participant Model
     participant View
-    Controller->>Model: crearCoche("Mercedes", "BXK 1234")
+    
+    Controller->>Model: Puedes crear un coche?
     activate Model
-    Model-->>Controller: Coche
+    Model-->>Controller: Creado!
     deactivate Model
-    Controller->>+View: muestraVelocidad("BXK 1234", velocidad)
+    App->>Controller: iniciarAplicacion()
+    activate Controller
+    Controller->>Model: crearCoche()
+    
+    Model-->>Controller: boolean
+    deactivate Controller
+    activate Model
+    Controller->>Model: getVelocidad()
+    deactivate Model
+    Model-->>Controller: int velocidad
+    activate Controller
+    Controller->>View: mostrarVelocidad()
+    deactivate Controller
     activate View
-    View->>-View: System.out.println()
-    View-->>Controller: boolean
+    View->>View: System.out.println()
     deactivate View
 ```

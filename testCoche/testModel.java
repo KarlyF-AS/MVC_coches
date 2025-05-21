@@ -1,67 +1,65 @@
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class testModel {
-
-    @Test
-    @DisplayName("Crear coche")
-    public void crearCoche(){
-        Model mo = new Model();
-        Coche co = mo.crearCoche("Volkswagen", "1234ABK");
-        assert co.matricula.equals("1234ABK");
-        assert co.modelo.equals("Volkswagen");
-
-        Model mo2 = new Model();
-        Coche co2 = mo2.crearCoche("KN", "1234ABJ");
-    }
-    @Test
-    @DisplayName("matricula")
-    public void getCoche(){
-        Model mo = new Model();
-        Coche co = mo.crearCoche("Volkswagen", "1234ABK");
-        Coche co2 = mo.getCoche("1234ABK");
-        assert co2.matricula.equals("1234ABK");
-    }
-    @Test
-    @DisplayName("null")
-    public void getCocheNull(){
-        Model mo = new Model();
-        Coche co2 = mo.getCoche("1234ABJ");
-        assert co2 == null;
-    }
-    @Test
-    @DisplayName("Cambiar velocidad")
-    public void cambiarVelocidad(){
-        Model mo = new Model();
-        Coche co = mo.crearCoche("Volkswagen", "1234ABK");
-        assertEquals(5000, mo.cambiarVelocidad("1234ABK", 100000));
-    }
-    @Test
-    @DisplayName("Subir velocidad")
-    public void SubirVelocidad() {
-        Model mo = new Model();
-        Coche co = mo.crearCoche("Volkswagen", "1234ABK");
-        int nuevaVelocidad = mo.subirVelocidad("1234ABK");
-        assertEquals(1, nuevaVelocidad);
+    @BeforeEach
+    public void limpiarParking() {
+        // Limpiar el parking antes de cada test
+        Model.getTodosLosCoches().clear();
     }
 
     @Test
-    @DisplayName("Bajar velocidad")
-    public void BajarVelocidad() {
-        Model mo = new Model();
-        Coche co = mo.crearCoche("Volkswagen", "1234ABK");
-        mo.subirVelocidad("1234ABK"); // Subimos la velocidad a 1
-        int nuevaVelocidad = mo.bajarVelocidad("1234ABK");
-        assertEquals(0, nuevaVelocidad);
+    @DisplayName("Crear coche exitosamente")
+    public void crearCocheExitoso() {
+        assertTrue(Model.crearCoche("Toyota", "1234ABC"));
+        assertEquals(1, Model.getTodosLosCoches().size());
     }
+
     @Test
-    @DisplayName("Coche inexistente")
-    public void cocheInexistente() {
-        Model mo = new Model();
-        Coche co = mo.crearCoche("Volkswagen", "1234ABJ");
-        int nuevaVelocidad = mo.bajarVelocidad("1234ABK");
-        assertEquals(-1, nuevaVelocidad);
+    @DisplayName("No crear coche con matrícula duplicada")
+    public void crearCocheDuplicado() {
+        Model.crearCoche("Toyota", "1234ABC");
+        assertFalse(Model.crearCoche("Honda", "1234ABC"));
+        assertEquals(1, Model.getTodosLosCoches().size());
+    }
+
+    @Test
+    @DisplayName("Cambiar velocidad exitosamente")
+    public void cambiarVelocidadExitoso() {
+        Model.crearCoche("Toyota", "1234ABC");
+        assertTrue(Model.cambiarVelocidad("1234ABC", 100));
+        assertEquals(100, Model.getVelocidad("1234ABC"));
+    }
+
+    @Test
+    @DisplayName("Acelerar coche exitosamente")
+    public void acelerarCocheExitoso() {
+        Model.crearCoche("Toyota", "1234ABC");
+        Model.cambiarVelocidad("1234ABC", 50);
+        assertEquals(51, Model.acelerarCoche("1234ABC"));
+    }
+
+    @Test
+    @DisplayName("Frenar coche exitosamente")
+    public void frenarCocheExitoso() {
+        Model.crearCoche("Toyota", "1234ABC");
+        Model.cambiarVelocidad("1234ABC", 50);
+        assertEquals(49, Model.bajasVelocidad("1234ABC"));
+    }
+
+    @Test
+    @DisplayName("Frenar coche con velocidad 0")
+    public void frenarCocheVelocidadCero() {
+        Model.crearCoche("Toyota", "1234ABC");
+        Model.cambiarVelocidad("1234ABC", 0);
+        assertEquals(0, Model.bajasVelocidad("1234ABC"));
+    }
+
+    @Test
+    @DisplayName("Obtener coche no existente")
+    public void obtenerCocheNoExistente() {
+        assertFalse(Model.getCoche("NO_EXISTE").isPresent());
     }
 }

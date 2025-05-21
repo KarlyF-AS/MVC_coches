@@ -1,25 +1,31 @@
+/**
+ * Clase que coordina el modelo y la vista (patrón MVC)
+ */
 public class Controller {
-    public static void inicio() {
-        // Instanciamos la vista y el modelo
-        View miView = new View();
-    //    Model miModel = new Model();
+    /**
+     * Inicia la aplicación cargando datos de prueba y mostrando el menú
+     */
+    public static void iniciarAplicacion() {
+        cargarDatosDePrueba();
+        View.menu();
+    }
 
-        // Crear tres coches
-        Model.crearCoche("LaFerrari", "SBC 1234");
-        Model.crearCoche("Alpine", "HYU 4567");
-        Model.crearCoche("Aston Martin", "FGH 3333");
+    private static void cargarDatosDePrueba() {
+        Model.crearCoche("Ferrari", "ABC 1234");
+        Model.crearCoche("BMW", "XYZ 5678");
+        Model.crearCoche("Audi", "DEF 9012");
 
-        Coche ferrari = Model.getCoche("SBC 1234");
-        // modifica la velocidad
-        int nuevaVelocidad = Model.cambiarVelocidad("SBC 1234", 30);
+        // Establecer velocidades iniciales
+        Model.cambiarVelocidad("ABC 1234", 120);
+        Model.cambiarVelocidad("XYZ 5678", 80);
+    }
 
-        // recoje la velocidad y la muestra (tarea de la View)
-        boolean hecho = miView.muestraVelocidad("SBC 1234", Model.getVelocidad("SBC 1234"));
-
-        if (hecho) {
-            System.out.println("Correcto");
-        } else {
-            System.out.println("Error");
-        } ;
+    /**
+     * Método para mostrar la velocidad de un coche
+     * @param matricula Matrícula del coche
+     */
+    public static void mostrarVelocidadCoche(String matricula) {
+        int velocidad = Model.getVelocidad(matricula);
+        View.mostrarVelocidad(matricula, velocidad);
     }
 }
